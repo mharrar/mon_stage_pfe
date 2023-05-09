@@ -1,0 +1,39 @@
+<mat-list-item *ngIf="message" [class.isMine]="isMine" [class.editMode]="isEditMode">
+  <ng-container ngProjectAs="[matListItemLine]" *ngIf="!isEditMode; else editForm">
+    <div matListItemTitle>{{ message.sender.username }}</div>
+    <div matListItemLine>{{ message.content }}</div>
+    <div matListItemLine class="message-date">{{ message.createdAt | date: 'shortDate' }}</div>
+
+    <ng-container *ngTemplateOutlet="contextMenu"></ng-container>
+  </ng-container>
+</mat-list-item>
+
+<ng-template #editForm>
+  <div matListItemLine class="message-edit-form">
+    <mat-form-field appearance="fill">
+      <input matInput type="text" placeholder="Message" [formControl]="messageToEdit">
+
+      <div matSuffix>
+        <button mat-icon-button (click)="cancelEdit()">
+          <mat-icon color="accent">close</mat-icon>
+        </button>
+
+        <button mat-icon-button (click)="handleEdit()">
+          <mat-icon color="accent">done</mat-icon>
+        </button>
+      </div>
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template #contextMenu>
+  <div class="menu">
+    <button mat-icon-button (click)="editMessage()">
+      <mat-icon>edit</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="handleDelete()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</ng-template>

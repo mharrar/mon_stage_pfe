@@ -1,0 +1,59 @@
+:host {
+  display: flex;
+
+  mat-list-item {
+    position: relative;
+    width: auto;
+    overflow: visible;
+    height: auto;
+
+    &.isMine {
+      margin-left: auto;
+
+      &:hover {
+        .menu {
+          visibility: visible;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+
+      .message-edit-form {
+        padding-top: 20px;
+
+        .mat-mdc-form-field {
+          width: 100%;
+        }
+      }
+    }
+
+    &.editMode {
+      flex: 1;
+    }
+
+    .message-date {
+      font-size: 11px;
+    }
+  }
+}
+
+.menu {
+  position: absolute;
+  top: 15px;
+  left: -20px;
+  display: none;
+  visibility: hidden;
+  color: #fff;
+
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    width: 30px;
+    height: 30px;
+    padding: 5px;
+
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 18px;
+    }
+  }
+}
