@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -20,6 +20,28 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatMenuModule } from "@angular/material/menu";
 
+
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8080',
+        realm: 'my-app-stage',
+        clientId: 'mon-application',
+      },
+      initOptions: {
+        onLoad: 'login-required',  // allowed values 'login-required', 'check-sso';
+        flow: "standard"          // allowed values 'standard', 'implicit', 'hybrid';
+      },
+    });
+}
+
+
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +51,7 @@ import { MatMenuModule } from "@angular/material/menu";
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-
+    KeycloakAngularModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     MatToolbarModule,
@@ -45,7 +67,12 @@ import { MatMenuModule } from "@angular/material/menu";
     MatProgressSpinnerModule,
     MatMenuModule,
   ],
-  providers: [],
+  providers: [ {
+    provide: APP_INITIALIZER,
+    useFactory: initializeKeycloak,
+    multi: true,
+    deps: [KeycloakService],
+  },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

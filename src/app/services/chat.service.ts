@@ -29,6 +29,7 @@ export class ChatService extends UserServiceService {
     return super.currentUser;
   }
 
+
   getMessages(): Observable<MessageInterface[]> {
     return collectionData(
       query(
@@ -49,11 +50,15 @@ export class ChatService extends UserServiceService {
   }
 
   addMessage(content: string) {
+
+
     return defer(() => from(
       addDoc(this.messagesCollectionRef, {
         content,
         createdAt: serverTimestamp(),
-        sender: this.currentSender
+
+        sender: this.currentSender,
+
       })
     ));
   }
